@@ -3,89 +3,77 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Anime Bhakti AI - Jai Shree Ram | Bhajan, Katha aur Anime Bhakti</title>
-<meta name="description" content="Anime Bhakti AI - Shree Ram, Krishna, Hanuman ji ki bhakti anime style me. Daily Bhajan, Katha aur Prerak Vichar.">
+<title>Anime Bhakti AI - Script se Episode Banao</title>
 <style>
-body{font-family:Arial,sans-serif;margin:0;background:#fff7e6;color:#333}
-header{background:#ff6b00;color:white;padding:20px;text-align:center}
-header h1{margin:0;font-size:28px}
-header p{margin:5px 0 0}
-nav{background:#7a2e00;padding:10px;text-align:center}
-nav a{color:white;margin:0 12px;text-decoration:none;font-weight:bold}
-.hero{padding:30px 15px;text-align:center;background:#ffe0b2}
-.hero h2{font-size:26px;color:#7a2e00}
-.btn{background:#ff6b00;color:white;padding:12px 20px;border-radius:25px;text-decoration:none;display:inline-block;margin-top:10px}
-.box{padding:20px;max-width:800px;margin:auto}
-.card{background:white;border-radius:12px;padding:15px;margin:12px 0;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-footer{background:#222;color:white;text-align:center;padding:20px;font-size:14px}
-footer a{color:#ffcc80}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#fff7e6}
+header{background:linear-gradient(90deg,#ff4d00,#ff8c00);color:white;text-align:center;padding:25px 10px}
+header h1{font-size:30px}
+nav{background:#7a1f00;display:flex;justify-content:center;gap:15px;padding:12px;position:sticky;top:0;z-index:99}
+nav a{color:white;text-decoration:none;font-weight:bold}
+.box{background:white;margin:15px;border-radius:18px;padding:18px;box-shadow:0 5px 15px rgba(0,0,0,0.1)}
+.box h2{color:#8a2a00;margin-bottom:10px}
+textarea{width:100%;height:140px;padding:12px;border:2px solid #ff8c00;border-radius:12px;font-size:15px}
+input{width:100%;padding:12px;margin-top:10px;border:2px solid #ddd;border-radius:12px;font-size:15px}
+.btn{width:100%;background:#ff5a00;color:white;border:none;padding:15px;border-radius:30px;font-weight:bold;font-size:17px;margin-top:12px;cursor:pointer}
+.scene{background:#fff0d6;border-left:5px solid #ff5a00;padding:12px;margin:12px 0;border-radius:10px}
+.scene b{color:#b10000;font-size:16px}
+.scene p{margin-top:5px;color:#333;line-height:1.6}
+.ep-box{background:white;margin:15px;border-radius:18px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1)}
+.ep-box img{width:100%}
+.ep-box .txt{padding:16px}
+.footer{background:#1a1a1a;color:#ccc;text-align:center;padding:20px;font-size:13px}
 </style>
 </head>
 <body>
+<header><h1>🙏 Anime Bhakti AI 🙏</h1><p>Script Daalo - Episode Ban Jayega!</p></header>
+<nav><a href="#">Home</a><a href="#">Episodes</a><a href="#">Bhajan</a><a href="#">Studio</a></nav>
 
-<header>
-<h1>🙏 Anime Bhakti AI 🙏</h1>
-<p>Jai Shree Ram | Jai Hanuman | Radhe Radhe</p>
-</header>
-
-<nav>
-<a href="#">Home</a>
-<a href="#bhajan">Bhajan</a>
-<a href="#katha">Katha</a>
-<a href="#about">About</a>
-<a href="#contact">Contact</a>
-</nav>
-
-<div class="hero">
-<h2>Anime Style me Bhakti ka Naya Anubhav</h2>
-<p>Roz naya Bhajan, Katha, aur Bhagwan ke sundar Anime roop. Mann ko shanti milegi.</p>
-<a class="btn" href="#bhajan">Aaj ka Bhajan Padhein</a>
+<div class="box">
+<h2>🎬 STUDIO - Script se Episode Banao</h2>
+<p style="color:#555;margin-bottom:10px">Aise likho: <b>Ram: Main Ayodhya se hu</b> - har line me ek character</p>
+<input id="title" placeholder="Episode ka naam likho - Ex: Ram ka Janm">
+<textarea id="script">Narrator: Ayodhya me khushi ka mahaul hai.
+Dashrath: Aaj mere ghar Ram aaye hain! Jai Shree Ram!
+Kaushalya: Dekhiye Maharaj! Kitna sundar balak hai!
+Ram: Namaste! Main Chhota Ram hu. Mujhe aashirwad dijiye!</textarea>
+<button class="btn" onclick="makeEpisode()">✨ EPISODE BANAO ✨</button>
 </div>
 
-<div class="box" id="bhajan">
-<h2>🎵 Aaj ka Bhajan</h2>
-<div class="card">
-<h3>Shree Ram Chandra Kripalu Bhajman</h3>
-<p>Shree Ram Chandra Kripalu Bhajman, Haran Bhav Bhay Darunam...<br><br>
-Nav Kanj Lochan, Kanj Mukh Kar, Kanj Pad Kanjarunam...</p>
-<p><b>Arth:</b> Jo Shree Ram ka bhajan karta hai, uske saare dukh door ho jaate hain.</p>
-</div>
-<div class="card">
-<h3>Hanuman Chalisa - Chaupai</h3>
-<p>Jai Hanuman Gyan Gun Sagar, Jai Kapis Tihu Lok Ujagar...</p>
-<p>Roz subah Hanuman Chalisa padhne se mann me himmat aur shakti aati hai.</p>
-</div>
+<div id="output"></div>
+
+<div class="ep-box">
+<img src="ram.jpg" alt="Chhota Ram">
+<div class="txt"><h3>🎬 Episode 1 - Shree Ram ka Janm (Example)</h3><p>Upar wale Studio me apni script daalo, yehi Episode ban ke neeche aa jayega. Phir usko copy karke CapCut me bolwa do, video ready!</p></div>
 </div>
 
-<div class="box" id="katha">
-<h2>📖 Aaj ki Katha</h2>
-<div class="card">
-<h3>Shree Ram aur Shabri ki Katha</h3>
-<p>Shabri ne saalon tak Shree Ram ka intezar kiya. Jab Ram ji aaye, to unhone Shabri ke jhoothe ber bhi prem se khaye. Isse ye seekh milti hai ki Bhagwan ko bhav chahiye, dikhawa nahi.</p>
-</div>
-<div class="card">
-<h3>Krishna aur Sudama ki Mitrata</h3>
-<p>Sudama ji gareeb the, par Krishna ne unhe gale lagaya. Sacchi mitrata aur bhakti me ameer-gareeb ka bhed nahi hota.</p>
-</div>
-</div>
+<div class="box"><h2>🎵 Aaj ka Bhajan</h2><p>Shree Ram Chandra Kripalu Bhajman, Haran Bhav Bhay Darunam...</p></div>
+<div class="box"><h2>🙏 Hanuman Chalisa</h2><p>Jai Hanuman Gyan Gun Sagar, Jai Kapis Tihu Lok Ujagar...</p></div>
 
-<div class="box" id="about">
-<h2>ℹ️ About Us</h2>
-<p>Anime Bhakti AI ek bhakti website hai, jahan hum Bhagwan Ram, Krishna, Hanuman ji ki kahaniyan, bhajan aur prerak vichar anime style ke sundar roop me pesh karte hain. Hamara uddeshya yuva peedhi ko bhakti se jodna hai.</p>
-<h3>Privacy Policy</h3>
-<p>Hum aapki koi personal jaankari collect nahi karte. Ye website sirf bhakti aur jaankari ke liye banayi gayi hai.</p>
-</div>
+<div class="footer">Anime Bhakti AI © 2026 | Made in Agra</div>
 
-<div class="box" id="contact">
-<h2>📩 Contact Us</h2>
-<p>Kisi sujhav ya bhajan ke liye humse sampark karein.</p>
-<p>Email: animebhaktiai@gmail.com</p>
-</div>
-
-<footer>
-<p>© 2026 Anime Bhakti AI | Jai Shree Ram</p>
-<p><a href="#about">Privacy Policy</a> | <a href="#about">About</a> | <a href="#contact">Contact</a></p>
-</footer>
-
+<script>
+function makeEpisode(){
+let title=document.getElementById('title').value || 'Mera Naya Episode';
+let text=document.getElementById('script').value;
+let lines=text.split('\n').filter(l=>l.trim()!=='');
+let html='<div class="box"><h2>🎬 '+title+'</h2><p style="color:green;font-weight:bold">✅ Episode Ready Hai! Neeche har character ka dialogue alag hai.</p>';
+lines.forEach(line=>{
+let parts=line.split(':');
+let name=parts[0]||'Character';
+let dialog=parts.slice(1).join(':')||line;
+let emoji='🗣️';
+if(name.toLowerCase().includes('ram')) emoji='🏹';
+if(name.toLowerCase().includes('hanuman')) emoji='🙏';
+if(name.toLowerCase().includes('sita')) emoji='🌸';
+if(name.toLowerCase().includes('krishna')) emoji='🦚';
+if(name.toLowerCase().includes('narrator')) emoji='🎙️';
+html+='<div class="scene"><b>'+emoji+' '+name+' Bolega:</b><p>"'+dialog.trim()+'"</p><small style="color:#888">👉 Is dialogue ko copy karke CapCut Talking Photo me daalo, ye character bolega.</small><br><small style="color:#ff5a00">🎨 Image Prompt: Cute anime cartoon '+name+' in Ayodhya palace, 2D cartoon style</small></div>';
+});
+html+='<p style="margin-top:10px;color:#333">🔥 <b>Video Banane ka Tarika:</b> 1. Har dialogue ko alag se CapCut me daalo 2. Usi character ki photo lagao 3. Sab jod do - Episode Ready!</p></div>';
+document.getElementById('output').innerHTML=html;
+window.scrollTo(0,document.getElementById('output').offsetTop-80);
+}
+</script>
 </body>
 </html>
