@@ -3,169 +3,177 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Script Se Full HD Video Maker</title>
+<title>Anime Bhakti AI - Script Se Sab Kuch Auto</title>
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif}
 body{margin:0;background:#0f0f1a;color:white;padding:15px}
 h1{text-align:center;font-size:22px;color:#ffcc00}
 .card{background:#1e1e2e;padding:15px;border-radius:15px;margin-bottom:12px}
 label{font-weight:bold;display:block;margin:10px 0 5px}
-textarea{width:100%;height:120px;border-radius:10px;padding:12px;font-size:16px;border:none;outline:none}
-select,input{width:100%;padding:12px;border-radius:10px;border:none;font-size:16px;margin-bottom:5px}
+textarea{width:100%;height:130px;border-radius:10px;padding:12px;font-size:16px;border:none;outline:none}
+select{width:100%;padding:12px;border-radius:10px;border:none;font-size:16px}
 .btn{width:100%;padding:15px;border:none;border-radius:12px;font-size:18px;font-weight:bold;cursor:pointer;margin-top:10px}
 .make{background:#ffcc00;color:black}
 .down{background:#00e676;color:black}
 canvas{width:100%;border-radius:12px;background:black;display:block}
-.row{display:flex;gap:10px}
-.row select{flex:1}
 .small{font-size:13px;color:#ccc;text-align:center}
+.auto{background:#2a2a3a;padding:10px;border-radius:10px;font-size:14px;margin-top:10px;line-height:22px}
 </style>
 </head>
 <body>
-<h1>🎬 Script Se Full HD Video Maker</h1>
+<h1>🎬 Anime Bhakti AI - SMART</h1>
+<p style="text-align:center;color:#ccc">Script likho, baaki sab AUTO ho jayega</p>
 
 <div class="card">
-<label>1. Apni Script Likho:</label>
-<textarea id="script" placeholder="Yahan apni script likho... Example: Dosto aaj hum sikhenge ki cartoon video kaise banate hai, wo bhi free me aur fatafat!">Dosto aaj hum sikhenge ki cartoon video kaise banate hai, wo bhi free me aur fatafat!</textarea>
+<label>1. Sirf Script Likho - Baaki Sab Auto:</label>
+<textarea id="script" oninput="autoDetect()" placeholder="Example: Jai Hanuman! Hanuman ji kehte hai haar mat maano...">Jai Hanuman! Hanuman ji kehte hai haar mat maano. Jab tak saans hai tab tak aas hai. Jo bhakt sacha hota hai uski har mushkil aasan ho jati hai. Comment me likho Jai Hanuman!</textarea>
 
-<label>2. Video Style Chuno:</label>
-<div class="row">
-<select id="style">
-<option value="cartoon">🎨 Cartoon</option>
-<option value="2d">✨ 2D Animation</option>
-<option value="real">🎥 Real / Cinematic</option>
-<option value="kids">🧒 Kids / Funny</option>
-<option value="motivational">🔥 Motivational</option>
-</select>
-<select id="voice">
-<option value="hi-IN">Hindi Voice</option>
-<option value="en-IN">Hinglish / English Voice</option>
-</select>
+<div class="auto" id="autoBox">
+🤖 <b>Auto Detect:</b><br>
+👤 Character: <span id="aChar">Hanuman</span><br>
+🎵 Music: <span id="aMusic">Powerful Dhol</span><br>
+🎨 Background: <span id="aBg">Orange - Power</span><br>
+🎙️ Audio: <span id="aVoice">Hindi - Josh wali</span>
 </div>
 
-<label>3. Video Background Color:</label>
-<select id="bg">
-<option value="#2196F3">Blue - Cartoon</option>
-<option value="#FF5722">Orange - Funny</option>
-<option value="#4CAF50">Green - Nature</option>
-<option value="#9C27B0">Purple - Magic</option>
-<option value="#000000">Black - Motivational</option>
-</select>
-
-<button class="btn make" onclick="makeVideo()">🚀 FATAFAT VIDEO BANAO - FULL HD</button>
-<p class="small" id="status">Ready hai bhai, script likh ke button dabao</p>
+<button class="btn make" onclick="makeVideo()">🚀 SCRIPT SE FULL VIDEO BANAO</button>
+<p class="small" id="status">Ready hai - Script ke hisaab se sab auto set hai</p>
 </div>
 
 <div class="card">
-<label>Preview - Full HD 1920x1080:</label>
+<label>Preview - Script Ke Hisaab Se:</label>
 <canvas id="canvas" width="1920" height="1080"></canvas>
 <br><br>
 <button class="btn down" onclick="downloadVideo()">⬇️ VIDEO DOWNLOAD KARO</button>
-<button class="btn" style="background:#fff;color:#000" onclick="playVoiceOnly()">🔊 SIRF AWAAZ SUNO</button>
 </div>
 
 <script>
-let recorder, chunks=[], isRecording=false;
 let canvas=document.getElementById('canvas');
 let ctx=canvas.getContext('2d');
+let recorder, chunks=[];
+let audioCtx=null, musicTimer=null, musicOn=false, musicGain=null;
 
-function getEmoji(style){
-  if(style=='cartoon') return ['😎','🎨','😂','🌟','🚀'];
-  if(style=='2d') return ['✨','🎬','💫','🎭','🌈'];
-  if(style=='kids') return ['🧒','🐶','🍭','🎈','🦄'];
-  if(style=='motivational') return ['🔥','💪','🏆','⭐','🎯'];
-  return ['🎥','🌆','🌍','🎞️','📸'];
+// ===== SCRIPT SE SAB KUCH AUTO DETECT =====
+function analyzeScript(text){
+  let t=text.toLowerCase();
+  let data={char:'krishna', music:'bhakti', bg:'#2196F3', bgName:'Blue - Krishna', voice:'hi-IN', voiceName:'Hindi - Pyari', mood:'bhakti'};
+  // CHARACTER
+  if(t.includes('hanuman') || t.includes('bajrang') || t.includes('bali')){ data.char='hanuman'; data.bg='#FF5722'; data.bgName='Orange - Power'; data.music='happy'; }
+  else if(t.includes('shiv') || t.includes('mahadev') || t.includes('bholenath') || t.includes('shankar')){ data.char='shiv'; data.bg='#4A148C'; data.bgName='Purple - Mahadev'; data.music='bhakti'; }
+  else if(t.includes('radha') || t.includes('rani') || t.includes('mata') || t.includes('durga') || t.includes('lakshmi')){ data.char='girl'; data.bg='#E91E63'; data.bgName='Pink - Radha'; data.music='bhakti'; }
+  else if(t.includes('krishna') || t.includes('kanha') || t.includes('radhe')){ data.char='krishna'; data.bg='#2196F3'; data.bgName='Blue - Krishna'; data.music='bhakti'; }
+  // MOOD / MUSIC - Script ke hisaab se
+  if(t.includes('haar') || t.includes('dukh') || t.includes('rona') || t.includes('mushkil') || t.includes('dard') || t.includes('sad')){ data.music='sad'; data.mood='sad'; }
+  else if(t.includes('jeet') || t.includes('josh') || t.includes('power') || t.includes('jai') || t.includes('har har') || t.includes('takat')){ data.music='happy'; data.mood='power'; }
+  else if(t.includes('pyar') || t.includes('prem') || t.includes('khush')){ data.music='happy'; data.mood='happy'; }
+  // VOICE SPEED
+  if(data.mood=='power') data.voiceName='Hindi - Josh Wali Fast';
+  else if(data.mood=='sad') data.voiceName='Hindi - Slow Emotional';
+  else data.voiceName='Hindi - Pyari Bhakti';
+  return data;
+}
+function autoDetect(){
+  let text=document.getElementById('script').value;
+  let d=analyzeScript(text);
+  let charName = d.char=='krishna'?'Krishna':d.char=='hanuman'?'Hanuman':d.char=='shiv'?'Mahadev':'Radha Rani';
+  let musicName = d.music=='bhakti'?'Bhakti Flute - Slow':d.music=='happy'?'Powerful Dhol - Fast':'Emotional - Soft';
+  document.getElementById('aChar').innerText=charName;
+  document.getElementById('aMusic').innerText=musicName;
+  document.getElementById('aBg').innerText=d.bgName;
+  document.getElementById('aVoice').innerText=d.voiceName;
+  drawFrame(text, d, 0.2, 0.5);
+  return d;
 }
 
-function drawFrame(text, style, bg, progress){
-  ctx.fillStyle=bg; ctx.fillRect(0,0,1920,1080);
-  // gradient top
-  ctx.fillStyle='rgba(0,0,0,0.35)'; ctx.fillRect(0,0,1920,250);
-  ctx.fillStyle='rgba(0,0,0,0.55)'; ctx.fillRect(0,880,1920,200);
-  ctx.fillStyle='#ffcc00'; ctx.font='bold 60px Arial'; ctx.fillText('SCRIPT SE VIDEO • FULL HD', 60, 110);
-  ctx.fillStyle='white'; ctx.font='bold 45px Arial'; ctx.fillText('Style: '+style.toUpperCase(), 60, 180);
-  // big emoji center
-  let emojis=getEmoji(style);
-  let idx=Math.floor(progress*5)%emojis.length;
-  ctx.font='280px Arial'; ctx.textAlign='center';
-  ctx.fillText(emojis[idx], 960, 650);
-  // bouncing ball for cartoon feel
-  let x=300+Math.sin(progress*6)*200;
-  ctx.beginPath(); ctx.arc(x, 850, 60, 0, Math.PI*2); ctx.fillStyle='#ffcc00'; ctx.fill();
-  // text box
-  ctx.textAlign='left'; ctx.fillStyle='white'; ctx.font='bold 52px Arial';
-  let words=text.split(' '); let line=''; let y=960; let lines=[];
-  words.forEach(w=>{ if((line+w).length>45){lines.push(line); line=w+' ';} else line+=w+' '; });
-  lines.push(line);
-  lines.slice(0,2).forEach((l,i)=>{ ctx.fillText(l, 60, 960+i*65); });
-  // progress bar
-  ctx.fillStyle='#333'; ctx.fillRect(60,1030,1800,20);
-  ctx.fillStyle='#00e676'; ctx.fillRect(60,1030,1800*progress,20);
+// ===== MUSIC SCRIPT KE HISAAB SE =====
+function playMusic(type){
+  if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+  stopMusic(); if(type=='off') return; musicOn=true;
+  musicGain=audioCtx.createGain(); musicGain.gain.value=0.12; musicGain.connect(audioCtx.destination);
+  let notes = type=='bhakti' ? [523,659,784,659,523,440,523] : type=='happy' ? [523,523,784,784,880,1046,880] : [440,392,440,523,392];
+  let i=0;
+  musicTimer=setInterval(()=>{ let o=audioCtx.createOscillator(); o.type='sine'; o.frequency.value=notes[i%notes.length]; o.connect(musicGain); o.start(); o.stop(audioCtx.currentTime+0.6); i++; }, type=='happy'?350:600);
+}
+function stopMusic(){ if(musicTimer) clearInterval(musicTimer); musicTimer=null; musicOn=false; }
+
+// ===== 2D CHARACTER - SCRIPT KE HISAAB SE =====
+function drawCharacter(char, t){
+  let cx=960, cy=580, bounce=Math.sin(t*3)*20;
+  ctx.fillStyle='rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(cx, 900, 220, 30, 0, 0, Math.PI*2); ctx.fill();
+  let skin = char=='krishna' ? '#4A90E2' : char=='hanuman' ? '#FF8C42' : char=='shiv' ? '#E0E0E0' : '#FFB6C1';
+  let cloth = char=='krishna' ? '#FFD700' : char=='hanuman' ? '#FF5722' : char=='shiv' ? '#FF9800' : '#FF69B4';
+  ctx.fillStyle=cloth; ctx.beginPath(); ctx.roundRect(cx-140, 600+bounce, 280, 280, 60); ctx.fill();
+  ctx.fillStyle=skin; ctx.beginPath(); ctx.arc(cx, 480+bounce, 160, 0, Math.PI*2); ctx.fill();
+  let blink = (Math.sin(t*2)>0.95) ? 5 : 35;
+  ctx.fillStyle='white'; ctx.beginPath(); ctx.ellipse(cx-60, 470+bounce, 35, blink, 0, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(cx+60, 470+bounce, 35, blink, 0, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle='black'; ctx.beginPath(); ctx.arc(cx-60, 475+bounce, 15, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(cx+60, 475+bounce, 15, 0, Math.PI*2); ctx.fill();
+  ctx.strokeStyle='black'; ctx.lineWidth=8; ctx.beginPath(); ctx.arc(cx, 530+bounce, 60, 0.2, Math.PI-0.2); ctx.stroke();
+  if(char=='krishna'){ ctx.fillStyle='#FFD700'; ctx.beginPath(); ctx.moveTo(cx-100, 340+bounce); ctx.lineTo(cx, 250+bounce); ctx.lineTo(cx+100, 340+bounce); ctx.fill(); ctx.fillStyle='#00E676'; ctx.font='60px Arial'; ctx.textAlign='center'; ctx.fillText('🦚', cx+130, 330+bounce); }
+  if(char=='shiv'){ ctx.fillStyle='white'; ctx.font='80px Arial'; ctx.textAlign='center'; ctx.fillText('🔱', cx, 340+bounce); }
+  if(char=='hanuman'){ ctx.fillStyle='#FFD700'; ctx.beginPath(); ctx.arc(cx, 340+bounce, 50, 0, Math.PI*2); ctx.fill(); ctx.fillStyle='red'; ctx.font='40px Arial'; ctx.textAlign='center'; ctx.fillText('💪', cx-180, 550+bounce); ctx.fillText('💪', cx+180, 550+bounce); }
+  if(char=='girl'){ ctx.fillStyle='#FF69B4'; ctx.beginPath(); ctx.arc(cx-120, 380+bounce, 40, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(cx+120, 380+bounce, 40, 0, Math.PI*2); ctx.fill(); }
+  let wave=Math.sin(t*5)*30;
+  ctx.strokeStyle=skin; ctx.lineWidth=30; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(cx-140, 650+bounce); ctx.lineTo(cx-240, 550+bounce+wave); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx+140, 650+bounce); ctx.lineTo(cx+240, 550+bounce-wave); ctx.stroke();
+  ctx.fillStyle='white'; ctx.font='bold 50px Arial'; ctx.textAlign='center';
+  let name = char=='krishna' ? 'SHREE KRISHNA' : char=='hanuman' ? 'JAI HANUMAN' : char=='shiv' ? 'HAR HAR MAHADEV' : 'RADHA RANI';
+  ctx.fillText(name, cx, 1020);
 }
 
-function speak(text, lang){
+function drawFrame(text, d, progress, t){
+  ctx.fillStyle=d.bg; ctx.fillRect(0,0,1920,1080);
+  ctx.fillStyle='rgba(0,0,0,0.3)'; ctx.fillRect(0,0,1920,180);
+  ctx.fillStyle='#ffcc00'; ctx.font='bold 55px Arial'; ctx.textAlign='left'; ctx.fillText('ANIME BHAKTI AI • SCRIPT SE AUTO', 60, 100);
+  ctx.fillStyle='white'; ctx.font='bold 40px Arial'; ctx.fillText('Character + Music + Voice = Script Ke Hisaab Se', 60, 155);
+  ctx.font='90px Arial'; ctx.textAlign='center';
+  ctx.fillText('✨', 200+Math.sin(t*2)*20, 300); ctx.fillText('🌸', 1720+Math.cos(t*2)*20, 300); ctx.fillText('🙏', 200, 800); ctx.fillText('🕉️', 1720, 800);
+  drawCharacter(d.char, t);
+  ctx.fillStyle='rgba(0,0,0,0.55)'; ctx.fillRect(0, 880, 1920, 200);
+  ctx.fillStyle='white'; ctx.font='bold 46px Arial'; ctx.textAlign='left';
+  let words=text.split(' '); let line=''; let lines=[];
+  words.forEach(w=>{ if((line+w).length>45){lines.push(line); line=w+' ';} else line+=w+' '; }); lines.push(line);
+  lines.slice(0,2).forEach((l,i)=>{ ctx.fillText(l, 60, 950+i*60); });
+  ctx.fillStyle='#333'; ctx.fillRect(60,1030,1800,20); ctx.fillStyle='#00e676'; ctx.fillRect(60,1030,1800*progress,20);
+}
+
+function speak(text, mood){
   speechSynthesis.cancel();
-  let u=new SpeechSynthesisUtterance(text);
-  u.lang=lang; u.rate=1; u.pitch=1;
-  let voices=speechSynthesis.getVoices();
-  let v=voices.find(v=>v.lang.includes(lang.split('-')[0]));
-  if(v) u.voice=v;
-  speechSynthesis.speak(u);
-  return u;
+  let u=new SpeechSynthesisUtterance(text); u.lang='hi-IN';
+  u.rate = mood=='power' ? 1.1 : mood=='sad' ? 0.85 : 1;
+  u.pitch = mood=='power' ? 1.1 : 1;
+  speechSynthesis.speak(u); return u;
 }
 
 function makeVideo(){
   let text=document.getElementById('script').value.trim();
   if(!text){ alert('Pehle script likho bhai!'); return; }
-  let style=document.getElementById('style').value;
-  let lang=document.getElementById('voice').value;
-  let bg=document.getElementById('bg').value;
-  document.getElementById('status').innerText='⏳ Ban raha hai... Fatafat ho jayega...';
-
-  // Start recording canvas Full HD
-  let stream=canvas.captureStream(30);
-  chunks=[];
+  let d=analyzeScript(text);
+  document.getElementById('status').innerText='⏳ Ban Raha Hai... '+ (d.char=='hanuman'?'Hanuman':d.char=='shiv'?'Mahadev':d.char=='girl'?'Radha':'Krishna') +' + Music + Voice - Script Ke Hisaab Se';
+  let stream=canvas.captureStream(30); chunks=[];
   recorder=new MediaRecorder(stream,{mimeType:'video/webm;codecs=vp9', videoBitsPerSecond:8000000});
   recorder.ondataavailable=e=>{ if(e.data.size>0) chunks.push(e.data); };
-  recorder.onstop=()=>{
-    document.getElementById('status').innerText='✅ Video Ban Gaya! Ab Download dabao';
-  };
+  recorder.onstop=()=>{ document.getElementById('status').innerText='✅ Ho Gaya! Script Ke Hisaab Se Video Ban Gaya - Download Kar Lo'; };
   recorder.start();
-  isRecording=true;
-
-  // Speak
-  let utter=speak(text, lang);
-  let start=Date.now();
-  let duration=Math.max(6000, text.length*80);
+  playMusic(d.music);
+  speak(text, d.mood);
+  let start=Date.now(); let duration=Math.max(7000, text.length*90);
   let anim=setInterval(()=>{
-    let p=(Date.now()-start)/duration;
-    if(p>=1){ clearInterval(anim); if(isRecording){ recorder.stop(); isRecording=false; } speechSynthesis.cancel(); return; }
-    drawFrame(text, style, bg, p);
+    let p=(Date.now()-start)/duration; let t=(Date.now()-start)/1000;
+    if(p>=1){ clearInterval(anim); recorder.stop(); stopMusic(); speechSynthesis.cancel(); return; }
+    drawFrame(text, d, p, t);
   }, 33);
-  drawFrame(text, style, bg, 0);
 }
-
-function playVoiceOnly(){
-  let text=document.getElementById('script').value;
-  let lang=document.getElementById('voice').value;
-  speak(text, lang);
-}
-
 function downloadVideo(){
-  if(chunks.length==0){ alert('Pehle VIDEO BANAO button dabao!'); return; }
+  if(chunks.length==0){ alert('Pehle VIDEO BANAO dabao!'); return; }
   let blob=new Blob(chunks,{type:'video/webm'});
-  let a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download='my-full-hd-video.webm';
-  a.click();
-  alert('Download ho gaya bhai! Gallery me check karo.');
+  let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='script-se-video.webm'; a.click();
+  alert('Download ho gaya bhai!');
 }
-drawFrame('Apni script likho aur video banao', 'cartoon', '#2196F3', 0.2);
+autoDetect();
 </script>
 </body>
 </html>
-
-
-
-
   
