@@ -1,103 +1,55 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Anime Bhakti AI - Sab Kuch Yahi Hoga</title>
+<title>Anime Bhakti AI</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#fff7e6}
-header{background:linear-gradient(90deg,#ff4d00,#ff8c00);color:white;text-align:center;padding:22px 10px}
-header h1{font-size:28px}
-nav{background:#7a1f00;display:flex;justify-content:center;gap:12px;padding:12px;position:sticky;top:0;z-index:99}
-nav a{color:white;text-decoration:none;font-weight:bold;font-size:14px}
-.box{background:white;margin:14px;border-radius:18px;padding:16px;box-shadow:0 5px 15px rgba(0,0,0,.1)}
-.box h2{color:#8a2a00;margin-bottom:8px}
-textarea{width:100%;height:150px;padding:12px;border:2px solid #ff8c00;border-radius:12px;font-size:15px}
-input,select{width:100%;padding:12px;margin-top:10px;border:2px solid #ddd;border-radius:12px;font-size:15px}
-.btn{width:100%;background:#ff5a00;color:white;border:none;padding:15px;border-radius:30px;font-weight:bold;font-size:17px;margin-top:12px}
-.btn2{background:#1a9e00;color:white;border:none;padding:10px 14px;border-radius:20px;font-weight:bold;margin:6px 5px 0 0}
-.btn3{background:#6a00ff;color:white;border:none;padding:10px 14px;border-radius:20px;font-weight:bold;margin:6px 5px 0 0}
-.btn4{background:#ff006a;color:white;border:none;padding:10px 14px;border-radius:20px;font-weight:bold;margin:6px 5px 0 0}
-.scene{background:#fff0d6;border-left:5px solid #ff5a00;padding:12px;margin:12px 0;border-radius:10px}
-.scene b{color:#b10000;font-size:17px}
-.scene p{margin-top:5px;color:#333;line-height:1.6}
-#stage{background:#1a1a1a;color:white;padding:15px;border-radius:15px;margin:14px;text-align:center;display:none}
-#stageCanvas{width:100%;max-width:400px;border-radius:12px;background:#ff8c00}
-.footer{background:#1a1a1a;color:#ccc;text-align:center;padding:20px;font-size:13px}
+body{background:#fff7e6;font-family:Arial;margin:0}
+header{background:#ff4d00;color:white;text-align:center;padding:20px}
+.box{background:white;margin:12px;padding:15px;border-radius:15px}
+textarea{width:100%;height:140px;padding:10px;font-size:15px}
+input{width:100%;padding:10px;margin-top:10px}
+button{width:100%;background:#ff5a00;color:white;border:none;padding:14px;border-radius:25px;font-weight:bold;font-size:16px;margin-top:10px}
+.scene{background:#fff0d6;padding:12px;margin:10px 0;border-radius:10px;border-left:5px solid #ff5a00}
+.small{width:auto;background:green;padding:8px 15px;border-radius:20px;font-size:14px;margin:5px 5px 0 0}
 </style>
 </head>
 <body>
-<header><h1>🙏 Anime Bhakti AI 🙏</h1><p>Ab Kahi Nahi Jana - Sab Yahi Hoga!</p></header>
-<nav><a href="#">Home</a><a href="#">Episodes</a><a href="#">Bhajan</a><a href="#">Studio</a></nav>
-
+<header><h1>🙏 Anime Bhakti AI 🙏</h1><p>Sab Kuch Yahi Hoga</p></header>
 <div class="box">
-<h2>🎬 MERA STUDIO - Sab Kuch Yahi</h2>
-<input id="title" value="Episode 2 - Hanuman ji ka Aagman" placeholder="Episode ka naam">
+<h2>🎬 STUDIO</h2>
+<input id="title" value="Episode 2 - Hanuman ji">
 <textarea id="script">Narrator: Aaj Ayodhya me sab Hanuman ji ka intezar kar rahe hain.
-Ram: Hanuman, tum kahan ho? Tumhare bina Ayodhya adhuri hai.
-Hanuman: Jai Shree Ram! Prabhu, main aa gaya! Aapne yaad kiya aur main daud ke aa gaya!
-Sita: Hanuman, tum to mere sabse pyare bete jaisa ho.
-Hanuman: Mata, ye sab Prabhu Shree Ram ki kripa hai. Main to bas unka chhota sa sevak hu.
-Ram: Hanuman, tum mere liye Lakshman se bhi badhkar ho.
-Hanuman: Prabhu, mujhe aur kuch nahi chahiye. Bas aapke charno me jagah mil jaye.</textarea>
-<label style="font-size:13px;color:#666">Awaaz chuno:</label>
-<select id="voiceType"><option value="1">Normal Awaaz</option><option value="0.7">Bhaari Awaaz - Hanuman jaisi</option><option value="1.3">Patli Awaaz - Sita / Bachha jaisi</option></select>
-<button class="btn" onclick="makeEpisode()">✨ 1. EPISODE BANAO ✨</button>
+Ram: Hanuman, tum kahan ho?
+Hanuman: Jai Shree Ram! Prabhu, main aa gaya!
+Sita: Hanuman, tum to mere bete jaisa ho.
+Hanuman: Mata, ye sab Prabhu ki kripa hai.</textarea>
+<button onclick="banao()">✨ EPISODE BANAO - DABAO ✨</button>
 </div>
-
-<div id="stage">
-<canvas id="stageCanvas" width="720" height="720"></canvas>
-<p id="stageText" style="margin-top:10px;font-size:18px;line-height:1.5"></p>
-<p style="color:#ffcc00;font-size:13px">👆 Yahi tumhara Video Screen hai. Yahi se video banega.</p>
-</div>
-
 <div id="output"></div>
-
-<div class="box"><h2>🎵 Aaj ka Bhajan - Yahi Suno</h2><p>Shree Ram Chandra Kripalu Bhajman...</p><button class="btn2" onclick="speakBhajan()">🔊 Bhajan Suno</button></div>
-<div class="box"><h2>🙏 Hanuman Chalisa - Yahi Suno</h2><p>Jai Hanuman Gyan Gun Sagar, Jai Kapis Tihu Lok Ujagar...</p><button class="btn2" onclick="speakChalisa()">🔊 Chalisa Suno</button></div>
-<div class="footer">Anime Bhakti AI © 2026 | Made in Agra | Sab Kuch Yahi Hota Hai</div>
-
 <script>
-let episodes=[];
-function getEmoji(name){
-let n=name.toLowerCase();
-if(n.includes('ram')) return '🏹';
-if(n.includes('hanuman')) return '🙏';
-if(n.includes('sita')) return '🌸';
-if(n.includes('krishna')) return '🦚';
-if(n.includes('narrator')) return '🎙️';
-return '🗣️';
+function banao(){
+alert("Button kaam kar gaya!");
+var t=document.getElementById("script").value;
+var lines=t.split("\n");
+var html='<div class="box"><h2>✅ Episode Ban Gaya!</h2>';
+for(var i=0;i<lines.length;i++){
+if(lines[i].trim()=="") continue;
+var parts=lines[i].split(":");
+var name=parts[0];
+var dialog=parts.slice(1).join(":");
+html+='<div class="scene"><b>'+name+' Bolega:</b><p>'+dialog+'</p><button class="small" onclick="bolo(\''+dialog.replace(/'/g,"")+'\')">🔊 Suno</button></div>';
 }
-function getColor(name){
-let n=name.toLowerCase();
-if(n.includes('ram')) return '#ff8c00';
-if(n.includes('hanuman')) return '#ff4d00';
-if(n.includes('sita')) return '#ff6fae';
-if(n.includes('krishna')) return '#4a90ff';
-return '#ffb300';
+html+='<p style="color:green;font-weight:bold">Ab upar se Screen Record on karo aur 🔊 Suno dabate jao, video ban jayega!</p></div>';
+document.getElementById("output").innerHTML=html;
+window.scrollTo(0,500);
 }
-function drawCharacter(name, dialog){
-let c=document.getElementById('stageCanvas');
-let ctx=c.getContext('2d');
-let color=getColor(name);
-ctx.fillStyle=color; ctx.fillRect(0,0,720,720);
-ctx.fillStyle='#fff3d6'; ctx.beginPath(); ctx.arc(360,300,180,0,Math.PI*2); ctx.fill();
-ctx.fillStyle='#000'; ctx.beginPath(); ctx.arc(300,280,18,0,Math.PI*2); ctx.arc(420,280,18,0,Math.PI*2); ctx.fill();
-ctx.strokeStyle='#000'; ctx.lineWidth=6; ctx.beginPath(); ctx.arc(360,340,70,0.1,Math.PI-0.1); ctx.stroke();
-ctx.fillStyle='white'; ctx.font='bold 38px Arial'; ctx.textAlign='center';
-ctx.fillText(getEmoji(name)+' '+name,360,560);
-ctx.font='26px Arial';
-let lines=dialog.match(/.{1,28}/g)||[dialog];
-lines.slice(0,4).forEach((w,i)=>{ctx.fillText(w,360,600+i*34)});
+function bolo(txt){
+var u=new SpeechSynthesisUtterance(txt);
+u.lang="hi-IN";
+speechSynthesis.speak(u);
 }
-function makeEpisode(){
-let title=document.getElementById('title').value||'Mera Episode';
-let text=document.getElementById('script').value;
-let lines=text.split('\n').filter(l=>l.trim()!=='');
-episodes=lines.map(line=>{
-let p=line.split(':');
-return {name:(p[0]||'Character').trim(), dialog:p.slice(1).join(':').trim()||line, emoji:getEmoji(p[0]||'')}
-});
-let html='<div class="box"><h2>🎬 '+title+'</h2><p style="color:green;font-weight:bold">✅ Episode Ban Gaya! Ab yahi se suno aur video banao. Kahi mat jao.</p>';
-html+='<button class="btn2" onclick="playAll()">▶️ 2. POORA
+</script>
+</body>
+</html>
