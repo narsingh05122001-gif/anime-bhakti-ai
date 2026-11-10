@@ -1,55 +1,171 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Anime Bhakti AI</title>
+<title>Script Se Full HD Video Maker</title>
 <style>
-body{background:#fff7e6;font-family:Arial;margin:0}
-header{background:#ff4d00;color:white;text-align:center;padding:20px}
-.box{background:white;margin:12px;padding:15px;border-radius:15px}
-textarea{width:100%;height:140px;padding:10px;font-size:15px}
-input{width:100%;padding:10px;margin-top:10px}
-button{width:100%;background:#ff5a00;color:white;border:none;padding:14px;border-radius:25px;font-weight:bold;font-size:16px;margin-top:10px}
-.scene{background:#fff0d6;padding:12px;margin:10px 0;border-radius:10px;border-left:5px solid #ff5a00}
-.small{width:auto;background:green;padding:8px 15px;border-radius:20px;font-size:14px;margin:5px 5px 0 0}
+*{box-sizing:border-box;font-family:Arial,sans-serif}
+body{margin:0;background:#0f0f1a;color:white;padding:15px}
+h1{text-align:center;font-size:22px;color:#ffcc00}
+.card{background:#1e1e2e;padding:15px;border-radius:15px;margin-bottom:12px}
+label{font-weight:bold;display:block;margin:10px 0 5px}
+textarea{width:100%;height:120px;border-radius:10px;padding:12px;font-size:16px;border:none;outline:none}
+select,input{width:100%;padding:12px;border-radius:10px;border:none;font-size:16px;margin-bottom:5px}
+.btn{width:100%;padding:15px;border:none;border-radius:12px;font-size:18px;font-weight:bold;cursor:pointer;margin-top:10px}
+.make{background:#ffcc00;color:black}
+.down{background:#00e676;color:black}
+canvas{width:100%;border-radius:12px;background:black;display:block}
+.row{display:flex;gap:10px}
+.row select{flex:1}
+.small{font-size:13px;color:#ccc;text-align:center}
 </style>
 </head>
 <body>
-<header><h1>🙏 Anime Bhakti AI 🙏</h1><p>Sab Kuch Yahi Hoga</p></header>
-<div class="box">
-<h2>🎬 STUDIO</h2>
-<input id="title" value="Episode 2 - Hanuman ji">
-<textarea id="script">Narrator: Aaj Ayodhya me sab Hanuman ji ka intezar kar rahe hain.
-Ram: Hanuman, tum kahan ho?
-Hanuman: Jai Shree Ram! Prabhu, main aa gaya!
-Sita: Hanuman, tum to mere bete jaisa ho.
-Hanuman: Mata, ye sab Prabhu ki kripa hai.</textarea>
-<button onclick="banao()">✨ EPISODE BANAO - DABAO ✨</button>
+<h1>🎬 Script Se Full HD Video Maker</h1>
+
+<div class="card">
+<label>1. Apni Script Likho:</label>
+<textarea id="script" placeholder="Yahan apni script likho... Example: Dosto aaj hum sikhenge ki cartoon video kaise banate hai, wo bhi free me aur fatafat!">Dosto aaj hum sikhenge ki cartoon video kaise banate hai, wo bhi free me aur fatafat!</textarea>
+
+<label>2. Video Style Chuno:</label>
+<div class="row">
+<select id="style">
+<option value="cartoon">🎨 Cartoon</option>
+<option value="2d">✨ 2D Animation</option>
+<option value="real">🎥 Real / Cinematic</option>
+<option value="kids">🧒 Kids / Funny</option>
+<option value="motivational">🔥 Motivational</option>
+</select>
+<select id="voice">
+<option value="hi-IN">Hindi Voice</option>
+<option value="en-IN">Hinglish / English Voice</option>
+</select>
 </div>
-<div id="output"></div>
+
+<label>3. Video Background Color:</label>
+<select id="bg">
+<option value="#2196F3">Blue - Cartoon</option>
+<option value="#FF5722">Orange - Funny</option>
+<option value="#4CAF50">Green - Nature</option>
+<option value="#9C27B0">Purple - Magic</option>
+<option value="#000000">Black - Motivational</option>
+</select>
+
+<button class="btn make" onclick="makeVideo()">🚀 FATAFAT VIDEO BANAO - FULL HD</button>
+<p class="small" id="status">Ready hai bhai, script likh ke button dabao</p>
+</div>
+
+<div class="card">
+<label>Preview - Full HD 1920x1080:</label>
+<canvas id="canvas" width="1920" height="1080"></canvas>
+<br><br>
+<button class="btn down" onclick="downloadVideo()">⬇️ VIDEO DOWNLOAD KARO</button>
+<button class="btn" style="background:#fff;color:#000" onclick="playVoiceOnly()">🔊 SIRF AWAAZ SUNO</button>
+</div>
+
 <script>
-function banao(){
-alert("Button kaam kar gaya!");
-var t=document.getElementById("script").value;
-var lines=t.split("\n");
-var html='<div class="box"><h2>✅ Episode Ban Gaya!</h2>';
-for(var i=0;i<lines.length;i++){
-if(lines[i].trim()=="") continue;
-var parts=lines[i].split(":");
-var name=parts[0];
-var dialog=parts.slice(1).join(":");
-html+='<div class="scene"><b>'+name+' Bolega:</b><p>'+dialog+'</p><button class="small" onclick="bolo(\''+dialog.replace(/'/g,"")+'\')">🔊 Suno</button></div>';
+let recorder, chunks=[], isRecording=false;
+let canvas=document.getElementById('canvas');
+let ctx=canvas.getContext('2d');
+
+function getEmoji(style){
+  if(style=='cartoon') return ['😎','🎨','😂','🌟','🚀'];
+  if(style=='2d') return ['✨','🎬','💫','🎭','🌈'];
+  if(style=='kids') return ['🧒','🐶','🍭','🎈','🦄'];
+  if(style=='motivational') return ['🔥','💪','🏆','⭐','🎯'];
+  return ['🎥','🌆','🌍','🎞️','📸'];
 }
-html+='<p style="color:green;font-weight:bold">Ab upar se Screen Record on karo aur 🔊 Suno dabate jao, video ban jayega!</p></div>';
-document.getElementById("output").innerHTML=html;
-window.scrollTo(0,500);
+
+function drawFrame(text, style, bg, progress){
+  ctx.fillStyle=bg; ctx.fillRect(0,0,1920,1080);
+  // gradient top
+  ctx.fillStyle='rgba(0,0,0,0.35)'; ctx.fillRect(0,0,1920,250);
+  ctx.fillStyle='rgba(0,0,0,0.55)'; ctx.fillRect(0,880,1920,200);
+  ctx.fillStyle='#ffcc00'; ctx.font='bold 60px Arial'; ctx.fillText('SCRIPT SE VIDEO • FULL HD', 60, 110);
+  ctx.fillStyle='white'; ctx.font='bold 45px Arial'; ctx.fillText('Style: '+style.toUpperCase(), 60, 180);
+  // big emoji center
+  let emojis=getEmoji(style);
+  let idx=Math.floor(progress*5)%emojis.length;
+  ctx.font='280px Arial'; ctx.textAlign='center';
+  ctx.fillText(emojis[idx], 960, 650);
+  // bouncing ball for cartoon feel
+  let x=300+Math.sin(progress*6)*200;
+  ctx.beginPath(); ctx.arc(x, 850, 60, 0, Math.PI*2); ctx.fillStyle='#ffcc00'; ctx.fill();
+  // text box
+  ctx.textAlign='left'; ctx.fillStyle='white'; ctx.font='bold 52px Arial';
+  let words=text.split(' '); let line=''; let y=960; let lines=[];
+  words.forEach(w=>{ if((line+w).length>45){lines.push(line); line=w+' ';} else line+=w+' '; });
+  lines.push(line);
+  lines.slice(0,2).forEach((l,i)=>{ ctx.fillText(l, 60, 960+i*65); });
+  // progress bar
+  ctx.fillStyle='#333'; ctx.fillRect(60,1030,1800,20);
+  ctx.fillStyle='#00e676'; ctx.fillRect(60,1030,1800*progress,20);
 }
-function bolo(txt){
-var u=new SpeechSynthesisUtterance(txt);
-u.lang="hi-IN";
-speechSynthesis.speak(u);
+
+function speak(text, lang){
+  speechSynthesis.cancel();
+  let u=new SpeechSynthesisUtterance(text);
+  u.lang=lang; u.rate=1; u.pitch=1;
+  let voices=speechSynthesis.getVoices();
+  let v=voices.find(v=>v.lang.includes(lang.split('-')[0]));
+  if(v) u.voice=v;
+  speechSynthesis.speak(u);
+  return u;
 }
+
+function makeVideo(){
+  let text=document.getElementById('script').value.trim();
+  if(!text){ alert('Pehle script likho bhai!'); return; }
+  let style=document.getElementById('style').value;
+  let lang=document.getElementById('voice').value;
+  let bg=document.getElementById('bg').value;
+  document.getElementById('status').innerText='⏳ Ban raha hai... Fatafat ho jayega...';
+
+  // Start recording canvas Full HD
+  let stream=canvas.captureStream(30);
+  chunks=[];
+  recorder=new MediaRecorder(stream,{mimeType:'video/webm;codecs=vp9', videoBitsPerSecond:8000000});
+  recorder.ondataavailable=e=>{ if(e.data.size>0) chunks.push(e.data); };
+  recorder.onstop=()=>{
+    document.getElementById('status').innerText='✅ Video Ban Gaya! Ab Download dabao';
+  };
+  recorder.start();
+  isRecording=true;
+
+  // Speak
+  let utter=speak(text, lang);
+  let start=Date.now();
+  let duration=Math.max(6000, text.length*80);
+  let anim=setInterval(()=>{
+    let p=(Date.now()-start)/duration;
+    if(p>=1){ clearInterval(anim); if(isRecording){ recorder.stop(); isRecording=false; } speechSynthesis.cancel(); return; }
+    drawFrame(text, style, bg, p);
+  }, 33);
+  drawFrame(text, style, bg, 0);
+}
+
+function playVoiceOnly(){
+  let text=document.getElementById('script').value;
+  let lang=document.getElementById('voice').value;
+  speak(text, lang);
+}
+
+function downloadVideo(){
+  if(chunks.length==0){ alert('Pehle VIDEO BANAO button dabao!'); return; }
+  let blob=new Blob(chunks,{type:'video/webm'});
+  let a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='my-full-hd-video.webm';
+  a.click();
+  alert('Download ho gaya bhai! Gallery me check karo.');
+}
+drawFrame('Apni script likho aur video banao', 'cartoon', '#2196F3', 0.2);
 </script>
 </body>
 </html>
+
+
+
+
+  
