@@ -1,411 +1,61 @@
-<!DOCTYPE html>
-<html lang="hi">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Anime Bhakti AI Studio</title>
-
-<style>
-*{box-sizing:border-box}
-body{
- margin:0;background:#100e20;color:white;
- font-family:Arial,sans-serif;padding:15px
-}
-h1{text-align:center;color:#ffca58}
-h3{color:#ffd477}
-.panel{
- background:#211d35;padding:15px;
- border-radius:14px;margin:15px 0;
- border:1px solid #493d68
-}
-input,select,textarea,button{
- width:100%;padding:12px;margin:7px 0;
- border-radius:9px;border:none;font-size:15px
-}
-input,select,textarea{background:#fff;color:#222}
-textarea{min-height:130px;resize:vertical}
-button{
- background:#ffb52e;color:#21142c;
- font-weight:bold;cursor:pointer
-}
-button:disabled{opacity:.5}
-.secondary{background:#63518e;color:white}
-.danger{background:#d94a58;color:white}
-.character{
- background:#342c4b;padding:12px;
- border-radius:12px;margin:10px 0
-}
-.character img{
- width:85px;height:85px;object-fit:cover;
- border-radius:10px;display:block;margin:8px 0
-}
-#stage{
- width:100%;max-width:390px;
- aspect-ratio:9/16;background:#080711;
- margin:auto;border-radius:16px;
- position:relative;overflow:hidden;
- display:flex;align-items:center;
- justify-content:center;
- border:2px solid #ffbd45
-}
-#person{
- width:100%;height:100%;object-fit:contain;
- position:absolute;inset:0
-}
-#mouth{
- position:absolute;bottom:24%;left:50%;
- transform:translateX(-50%);
- width:25px;height:5px;
- background:#5d1421;border-radius:50%;
- display:none
-}
-#mouth.talking{
- display:block;
- animation:talk .16s infinite alternate
-}
-@keyframes talk{
- from{height:3px;width:20px}
- to{height:19px;width:30px}
-}
-#speaker{
- position:absolute;bottom:10px;
- background:#000b;color:white;
- padding:10px 18px;border-radius:10px;
- text-align:center;width:90%
-}
-#status{text-align:center;color:#ffd477}
-.small{font-size:12px;color:#c9c0dc}
-</style>
-</head>
-
-<body>
-
-<h1>🙏 Anime Bhakti AI Studio</h1>
-<p style="text-align:center">
-अपनी फोटो लगाओ और अपने कैरेक्टर से डायलॉग बुलवाओ
-</p>
-
-<div class="panel">
-<h3>1. अपना कैरेक्टर बनाओ</h3>
-
-<input id="charName" placeholder="कैरेक्टर का नाम (जैसे कृष्ण)">
-<label>कैरेक्टर की फोटो चुनें</label>
-<input type="file" id="charPhoto" accept="image/*">
-
-<label>अपनी आवाज की ऑडियो फाइल (वैकल्पिक)</label>
-<input type="file" id="charAudio" accept="audio/*">
-
-<button onclick="addCharacter()">+ कैरेक्टर जोड़ें</button>
-
-<div id="characters"></div>
-</div>
-
-<div class="panel">
-<h3>2. अपनी स्क्रिप्ट लिखें</h3>
-
-<p class="small">
-हर लाइन में पहले कैरेक्टर का नाम लिखें, फिर डायलॉग।
-</p>
-
-<textarea id="script">कृष्ण: हे राधे! तुम इतनी चिंतित क्यों हो?
-राधा: प्रभु! संसार में इतना दुख क्यों है?
-कृष्ण: जो मुझ पर विश्वास करता है, मैं सदैव उसके साथ रहता हूँ।
-राधा: प्रभु! आपकी बातें सुनकर मेरा मन शांत हो गया।</textarea>
-
-<button class="secondary" onclick="showScriptHelp()">
-स्क्रिप्ट लिखने का तरीका
-</button>
-</div>
-
+<!-- VIDEO PREVIEW wale panel me ye buttons badlo -->
 <div class="panel">
 <h3>3. वीडियो प्रीव्यू</h3>
-
 <div id="stage">
 <img id="person" alt="Character">
 <div id="mouth"></div>
 <div id="speaker">कैरेक्टर यहाँ दिखाई देगा</div>
 </div>
-
 <p id="status">तैयार है ❤️</p>
 
 <button onclick="playScript()">▶ पूरी स्क्रिप्ट चलाओ</button>
 <button class="secondary" onclick="pauseScript()">⏸ रोकें</button>
 <button class="danger" onclick="stopScript()">⏹ बंद करें</button>
-</div>
 
-<div class="panel">
-<h3>4. आवाज की सेटिंग</h3>
-<label>हिंदी आवाज चुनें</label>
-<select id="voiceSelect"></select>
-<p class="small">
-आवाज की उपलब्धता आपके मोबाइल या ब्राउज़र पर निर्भर है।
-</p>
-<button class="secondary" onclick="testVoice()">
-आवाज टेस्ट करें
-</button>
-</div>
-
-<div class="panel">
-<h3>जरूरी जानकारी</h3>
-<p class="small">
-यह फ्री ब्राउज़र आधारित स्टार्टर प्रोजेक्ट है।
-इसमें फोटो, डायलॉग, हिंदी Text-to-Speech और
-बोलते समय मुँह की एनिमेशन उपलब्ध है।
-अपलोड की गई ऑडियो फाइल संबंधित कैरेक्टर के
-डायलॉग के दौरान चलाई जा सकती है।
-यह अपने आप असली AI Lip-Sync या MP4 वीडियो
-नहीं बनाता।
-</p>
+<!-- YE 2 NAYE BUTTON JODE HAIN -->
+<button style="background:#00d26a; margin-top:10px" onclick="startRecording()">🔴 Recording Start Karo</button>
+<button style="background:#3b82f6; margin-top:10px" onclick="downloadVideo()">📥 Video Download Karo</button>
+<p class="small">Note: Recording start karke script chalao, fir download dabao.</p>
 </div>
 
 <script>
-let chars=[];
-let running=false;
-let currentAudio=null;
-let voices=[];
-let speechToken=0;
+// Aapke purane script ke neeche ye naya code jodo
+let mediaRecorder;
+let recordedChunks = [];
 
-const $=id=>document.getElementById(id);
+async function startRecording(){
+  const stage = document.getElementById('stage');
+  const stream = stage.captureStream ? stage.captureStream(30) : null;
+  
+  // Screen recording API use
+  try{
+    const fullStream = await navigator.mediaDevices.getDisplayMedia({video:true, audio:true});
+    mediaRecorder = new MediaRecorder(fullStream);
+  } catch(e){
+    alert("Screen record allow karo, tabhi download hoga");
+    return;
+  }
 
-function loadVoices(){
- voices=speechSynthesis.getVoices();
- let select=$("voiceSelect");
- select.innerHTML="";
-
- voices.forEach((v,i)=>{
- let op=document.createElement("option");
- op.value=i;
- op.textContent=v.name+" ("+v.lang+")";
- select.appendChild(op);
- });
-
- let hindi=voices.findIndex(v=>v.lang.toLowerCase().startsWith("hi"));
- if(hindi>=0)select.value=hindi;
-}
-speechSynthesis.onvoiceschanged=loadVoices;
-loadVoices();
-
-function addCharacter(){
- let name=$("charName").value.trim();
- let photo=$("charPhoto").files[0];
- let audio=$("charAudio").files[0];
-
- if(!name||!photo){
- alert("नाम और फोटो दोनों जरूरी हैं");
- return;
- }
-
- let id=Date.now()+Math.random();
- let char={
- id,name,
- photo:URL.createObjectURL(photo),
- audio:audio?URL.createObjectURL(audio):null
- };
-
- chars.push(char);
- renderCharacters();
-
- $("charName").value="";
- $("charPhoto").value="";
- $("charAudio").value="";
+  recordedChunks = [];
+  mediaRecorder.ondataavailable = e => { if(e.data.size>0) recordedChunks.push(e.data); };
+  mediaRecorder.onstop = () => {
+    $("status").textContent = "Recording ho gayi, ab Download dabao";
+  };
+  mediaRecorder.start();
+  $("status").textContent = "🔴 Recording chal rahi hai... ab script chalao";
 }
 
-function renderCharacters(){
- let box=$("characters");
- box.innerHTML="";
-
- chars.forEach(c=>{
- let div=document.createElement("div");
- div.className="character";
-
- let img=document.createElement("img");
- img.src=c.photo;
-
- let title=document.createElement("b");
- title.textContent=c.name;
-
- let audioInfo=document.createElement("p");
- audioInfo.className="small";
- audioInfo.textContent=c.audio?
- "अपनी ऑडियो लगी हुई है":"ब्राउज़र की आवाज इस्तेमाल होगी";
-
- let del=document.createElement("button");
- del.className="danger";
- del.textContent="हटाएँ";
- del.onclick=()=>{
- chars=chars.filter(x=>x.id!==c.id);
- renderCharacters();
- };
-
- div.append(img,title,audioInfo,del);
- box.appendChild(div);
- });
-}
-
-function showScriptHelp(){
- alert(
- "उदाहरण:\n"+
- "कृष्ण: हे राधे, कैसी हो?\n"+
- "राधा: मैं अच्छी हूँ प्रभु!\n\n"+
- "हर डायलॉग नई लाइन में लिखें।"+
- "\nनाम वही रखें जो कैरेक्टर बनाते समय रखा है।"
- );
-}
-
-function animateMouth(active){
- $("mouth").classList.toggle("talking",active);
-}
-
-function showCharacter(c,text){
- $("person").src=c.photo;
- $("speaker").textContent=c.name+": "+text;
-}
-
-function wait(ms){
- return new Promise(resolve=>setTimeout(resolve,ms));
-}
-
-function speakText(text,token){
- return new Promise(resolve=>{
- if(token!==speechToken)return resolve();
-
- let utter=new SpeechSynthesisUtterance(text);
- utter.lang="hi-IN";
- utter.rate=0.9;
- utter.pitch=1;
-
- if(voices.length){
- let index=Number($("voiceSelect").value);
- if(voices[index])utter.voice=voices[index];
- }
-
- utter.onstart=()=>animateMouth(true);
- utter.onend=()=>{
- animateMouth(false);
- resolve();
- };
- utter.onerror=()=>{
- animateMouth(false);
- resolve();
- };
-
- speechSynthesis.speak(utter);
- });
-}
-
-function playAudio(url,token){
- return new Promise(resolve=>{
- if(token!==speechToken)return resolve();
-
- let audio=new Audio(url);
- currentAudio=audio;
-
- audio.onplay=()=>animateMouth(true);
- audio.onended=()=>{
- animateMouth(false);
- resolve();
- };
- audio.onerror=()=>{
- animateMouth(false);
- resolve();
- };
-
- audio.play().catch(()=>{
- animateMouth(false);
- resolve();
- });
- });
-}
-
-async function playScript(){
- if(chars.length===0){
- alert("पहले कम से कम एक कैरेक्टर जोड़ें");
- return;
- }
-
- stopScript();
- running=true;
- let token=speechToken;
-
- let lines=$("script").value
- .split("\n")
- .map(x=>x.trim())
- .filter(Boolean);
-
- $("status").textContent="वीडियो प्रीव्यू चल रहा है...";
-
- for(let line of lines){
- if(!running||token!==speechToken)break;
-
- let pos=line.indexOf(":");
- if(pos<1)continue;
-
- let name=line.substring(0,pos).trim();
- let dialogue=line.substring(pos+1).trim();
-
- let c=chars.find(
- x=>x.name.toLowerCase()===name.toLowerCase()
- );
-
- if(!c){
- $("status").textContent=
- "कैरेक्टर नहीं मिला: "+name;
- continue;
- }
-
- showCharacter(c,dialogue);
-
- if(c.audio){
- await playAudio(c.audio,token);
- }else{
- await speakText(dialogue,token);
- }
-
- if(!running||token!==speechToken)break;
- await wait(300);
- }
-
- if(token===speechToken){
- running=false;
- animateMouth(false);
- $("status").textContent="स्क्रिप्ट पूरी हुई ❤️";
- }
-}
-
-function pauseScript(){
- speechSynthesis.pause();
- if(currentAudio)currentAudio.pause();
- animateMouth(false);
- $("status").textContent="पॉज किया गया";
-}
-
-function stopScript(){
- running=false;
- speechToken++;
- speechSynthesis.cancel();
-
- if(currentAudio){
- currentAudio.pause();
- currentAudio.currentTime=0;
- currentAudio=null;
- }
-
- animateMouth(false);
-}
-
-function testVoice(){
- let u=new SpeechSynthesisUtterance(
- "नमस्कार भक्तों, भगवान श्रीकृष्ण की जय।"
- );
- u.lang="hi-IN";
-
- let index=Number($("voiceSelect").value);
- if(voices[index])u.voice=voices[index];
-
- speechSynthesis.cancel();
- speechSynthesis.speak(u);
+function downloadVideo(){
+  if(recordedChunks.length==0){
+    alert("Pehle Recording Start karo aur script chalao");
+    return;
+  }
+  let blob = new Blob(recordedChunks, {type:'video/webm'});
+  let url = URL.createObjectURL(blob);
+  let a = document.createElement('a');
+  a.href = url;
+  a.download = "anime-bhakti-video.webm";
+  a.click();
+  $("status").textContent = "Video Download ho gaya ❤️";
 }
 </script>
-
-</body>
-</html>
