@@ -4,420 +4,412 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#100d20">
-<title>Anime Bhakti AI - SMART</title>
+<title>Anime Bhakti AI Studio</title>
+
 <style>
-:root{--bg:#100d20;--panel:#211b36;--muted:#c9bddc;--gold:#ffcc00}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:#fff;font-family:system-ui,Arial,sans-serif;padding:0 12px 28px}
-header{text-align:center;padding:20px 8px 14px}
-h1{font-size:clamp(22px,5vw,30px);color:var(--gold);margin:0}
-header p{color:#ddd;margin:7px 0 0}
-main{max-width:900px;margin:auto}
-.card{background:var(--panel);border:1px solid #3d3157;border-radius:17px;padding:15px;margin:12px 0}
-label{display:block;font-weight:700;margin:12px 0 7px}
-textarea,input,select{width:100%;padding:12px;border-radius:10px;border:1px solid #665783;background:#fff;color:#171321;font:inherit}
-textarea{min-height:125px;resize:vertical}
-input[type=file]{background:#171321;color:#fff}
-button{border:0;border-radius:11px;padding:13px 15px;font-size:15px;font-weight:800;cursor:pointer;margin:5px 3px 0 0}
-button:disabled{opacity:.45;cursor:not-allowed}
-.primary{width:100%;background:var(--gold);color:#111;font-size:17px;padding:16px}
-.secondary{background:#51416f;color:#fff}
-.stop{background:#9d294b;color:#fff}
-.download{width:100%;background:#00d879;color:#08140d}
-.row{display:flex;gap:8px;flex-wrap:wrap}
-.row>*{flex:1;min-width:130px}
-.auto,.note,.status{background:#302942;border-radius:11px;padding:11px;line-height:1.75;margin-top:11px}
-.auto{font-size:14px}
-.note{font-size:13px;color:#ddd}
-.status{font-size:14px;color:#ffe58a;text-align:center}
-canvas{display:block;width:100%;height:auto;border-radius:12px;background:#080812}
-.small{font-size:12px;color:var(--muted);line-height:1.5}
-.preview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(95px,1fr));gap:8px;margin-top:10px}
-.thumb{width:100%;height:90px;object-fit:cover;border-radius:8px;border:1px solid #78658e}
-.meter{height:7px;background:#51416f;border-radius:8px;overflow:hidden;margin-top:9px}
-.meter span{display:block;height:100%;width:0;background:#00e676}
-@media(max-width:480px){body{padding-left:8px;padding-right:8px}.card{padding:12px}.row{gap:5px}.row button{font-size:13px}}
+body{
+ margin:0;background:#100e20;color:white;
+ font-family:Arial,sans-serif;padding:15px
+}
+h1{text-align:center;color:#ffca58}
+h3{color:#ffd477}
+.panel{
+ background:#211d35;padding:15px;
+ border-radius:14px;margin:15px 0;
+ border:1px solid #493d68
+}
+input,select,textarea,button{
+ width:100%;padding:12px;margin:7px 0;
+ border-radius:9px;border:none;font-size:15px
+}
+input,select,textarea{background:#fff;color:#222}
+textarea{min-height:130px;resize:vertical}
+button{
+ background:#ffb52e;color:#21142c;
+ font-weight:bold;cursor:pointer
+}
+button:disabled{opacity:.5}
+.secondary{background:#63518e;color:white}
+.danger{background:#d94a58;color:white}
+.character{
+ background:#342c4b;padding:12px;
+ border-radius:12px;margin:10px 0
+}
+.character img{
+ width:85px;height:85px;object-fit:cover;
+ border-radius:10px;display:block;margin:8px 0
+}
+#stage{
+ width:100%;max-width:390px;
+ aspect-ratio:9/16;background:#080711;
+ margin:auto;border-radius:16px;
+ position:relative;overflow:hidden;
+ display:flex;align-items:center;
+ justify-content:center;
+ border:2px solid #ffbd45
+}
+#person{
+ width:100%;height:100%;object-fit:contain;
+ position:absolute;inset:0
+}
+#mouth{
+ position:absolute;bottom:24%;left:50%;
+ transform:translateX(-50%);
+ width:25px;height:5px;
+ background:#5d1421;border-radius:50%;
+ display:none
+}
+#mouth.talking{
+ display:block;
+ animation:talk .16s infinite alternate
+}
+@keyframes talk{
+ from{height:3px;width:20px}
+ to{height:19px;width:30px}
+}
+#speaker{
+ position:absolute;bottom:10px;
+ background:#000b;color:white;
+ padding:10px 18px;border-radius:10px;
+ text-align:center;width:90%
+}
+#status{text-align:center;color:#ffd477}
+.small{font-size:12px;color:#c9c0dc}
 </style>
 </head>
+
 <body>
-<header>
-<h1>🎬 Anime Bhakti AI - SMART</h1>
-<p>Script likho • Apni photo/voice lagao • Video banao</p>
-</header>
-<main>
-<section class="card">
-<label for="script">1. Apni Hindi script likho</label>
-<textarea id="script" placeholder="Jaise: Jai Hanuman! Haar mat maano...">Jai Hanuman! Hanuman ji kehte hain haar mat maano. Jab tak saans hai tab tak aas hai. Jo bhakt sachcha hota hai uski har mushkil aasan ho jaati hai. Comment mein likho Jai Hanuman!</textarea>
 
-<div class="auto" id="autoBox">
-🤖 <b>Auto Detect</b><br>
-👤 Character: <span id="aChar">Hanuman</span><br>
-🎵 Music mood: <span id="aMusic">Powerful devotional</span><br>
-🎨 Theme: <span id="aBg">Orange - Power</span><br>
-🎙️ Language: Hindi
+<h1>🙏 Anime Bhakti AI Studio</h1>
+<p style="text-align:center">
+अपनी फोटो लगाओ और अपने कैरेक्टर से डायलॉग बुलवाओ
+</p>
+
+<div class="panel">
+<h3>1. अपना कैरेक्टर बनाओ</h3>
+
+<input id="charName" placeholder="कैरेक्टर का नाम (जैसे कृष्ण)">
+<label>कैरेक्टर की फोटो चुनें</label>
+<input type="file" id="charPhoto" accept="image/*">
+
+<label>अपनी आवाज की ऑडियो फाइल (वैकल्पिक)</label>
+<input type="file" id="charAudio" accept="audio/*">
+
+<button onclick="addCharacter()">+ कैरेक्टर जोड़ें</button>
+
+<div id="characters"></div>
 </div>
 
-<label for="photos">2. Apni character/background photos chuno (ek ya kai)</label>
-<input id="photos" type="file" accept="image/*" multiple>
-<div id="photoPreview" class="preview-grid"></div>
-<p class="small">Aapki photos scenes mein bari-bari background/character image ke roop mein dikhenगी. Photo ka asli chehra khud se animate ya lip-sync nahi hota.</p>
+<div class="panel">
+<h3>2. अपनी स्क्रिप्ट लिखें</h3>
 
-<label for="voiceFile">3. Apni voice / bhajan audio upload karo (optional)</label>
-<input id="voiceFile" type="file" accept="audio/*">
-<div class="row">
-<button class="secondary" id="micBtn" type="button">🎙️ Apni awaaz record karo</button>
-<button class="stop" id="micStop" type="button" disabled>⏹ Recording band</button>
+<p class="small">
+हर लाइन में पहले कैरेक्टर का नाम लिखें, फिर डायलॉग।
+</p>
+
+<textarea id="script">कृष्ण: हे राधे! तुम इतनी चिंतित क्यों हो?
+राधा: प्रभु! संसार में इतना दुख क्यों है?
+कृष्ण: जो मुझ पर विश्वास करता है, मैं सदैव उसके साथ रहता हूँ।
+राधा: प्रभु! आपकी बातें सुनकर मेरा मन शांत हो गया।</textarea>
+
+<button class="secondary" onclick="showScriptHelp()">
+स्क्रिप्ट लिखने का तरीका
+</button>
 </div>
-<p id="micStatus" class="small">Upload ki hui audio ya mic recording video mein music ke saath mix hogi.</p>
 
-<label for="duration">4. Video duration (voice na ho tab)</label>
-<select id="duration">
-<option value="15">15 seconds</option>
-<option value="30" selected>30 seconds</option>
-<option value="45">45 seconds</option>
-<option value="60">60 seconds</option>
-</select>
+<div class="panel">
+<h3>3. वीडियो प्रीव्यू</h3>
 
-<div class="row">
-<button class="secondary" id="voicePreview" type="button">🔊 Browser voice preview</button>
-<button class="secondary" id="voiceStop" type="button">Voice stop</button>
+<div id="stage">
+<img id="person" alt="Character">
+<div id="mouth"></div>
+<div id="speaker">कैरेक्टर यहाँ दिखाई देगा</div>
 </div>
-<p class="small">Browser voice preview sunne ke liye hai. Download video mein awaaz lane ke liye apni audio upload karein ya mic se record karein.</p>
 
-<button class="primary" id="makeBtn" type="button">🚀 SCRIPT SE FULL VIDEO BANAO</button>
-<div class="status" id="status" aria-live="polite">Ready hai. Script likho aur chahein to photo/voice add karo.</div>
-<div class="meter"><span id="progress"></span></div>
-</section>
+<p id="status">तैयार है ❤️</p>
 
-<section class="card">
-<label>5. Video Preview (16:9)</label>
-<canvas id="canvas" width="1280" height="720"></canvas>
-<button class="download" id="downloadBtn" type="button" disabled>⬇️ VIDEO DOWNLOAD KARO</button>
-<p class="small">Browser ke hisaab se file WebM format mein download hogi. Kuch phones par Gallery mein chalane ke liye MP4 conversion karna pad sakta hai.</p>
-</section>
+<button onclick="playScript()">▶ पूरी स्क्रिप्ट चलाओ</button>
+<button class="secondary" onclick="pauseScript()">⏸ रोकें</button>
+<button class="danger" onclick="stopScript()">⏹ बंद करें</button>
+</div>
 
-<section class="card note">
-<b>Free version ki sachchai:</b> Is file mein script-based character/theme detection, photo scenes, captions, animation, generated background tones, voice upload/mic recording aur video export browser mein hota hai. Ismein paid API ya API key nahi hai. Real AI-generated images, natural AI Hindi narration aur photo ka real lip-sync bina AI service/model ke nahi banega. Internet ke bina bhi page ke browser features chal sakte hain.
-</section>
-</main>
+<div class="panel">
+<h3>4. आवाज की सेटिंग</h3>
+<label>हिंदी आवाज चुनें</label>
+<select id="voiceSelect"></select>
+<p class="small">
+आवाज की उपलब्धता आपके मोबाइल या ब्राउज़र पर निर्भर है।
+</p>
+<button class="secondary" onclick="testVoice()">
+आवाज टेस्ट करें
+</button>
+</div>
+
+<div class="panel">
+<h3>जरूरी जानकारी</h3>
+<p class="small">
+यह फ्री ब्राउज़र आधारित स्टार्टर प्रोजेक्ट है।
+इसमें फोटो, डायलॉग, हिंदी Text-to-Speech और
+बोलते समय मुँह की एनिमेशन उपलब्ध है।
+अपलोड की गई ऑडियो फाइल संबंधित कैरेक्टर के
+डायलॉग के दौरान चलाई जा सकती है।
+यह अपने आप असली AI Lip-Sync या MP4 वीडियो
+नहीं बनाता।
+</p>
+</div>
 
 <script>
-'use strict';
-const $ = id => document.getElementById(id);
-const canvas = $('canvas'), ctx = canvas.getContext('2d');
-const W=canvas.width,H=canvas.height;
-let photos=[], photoUrls=[], recorder=null, chunks=[], finalBlob=null;
-let micRecorder=null,micChunks=[],micBlob=null,micStream=null;
-let recording=false,raf=0,audioCtx=null,musicTimer=0,voiceAudio=null;
+let chars=[];
+let running=false;
+let currentAudio=null;
+let voices=[];
+let speechToken=0;
 
-function analyze(text){
-const t=text.toLowerCase();
-let d={char:'krishna',bg:'#1769aa',bgName:'Blue - Krishna',mood:'bhakti'};
-if(/hanuman|हनुमान|बजरंग|बजरंगबली|मारुति|संकट मोचन/.test(t)) d={char:'hanuman',bg:'#b9431c',bgName:'Orange - Hanuman',mood:'power'};
-else if(/shiv|शिव|महादेव|भोलेनाथ|शंकर/.test(t)) d={char:'shiv',bg:'#45206e',bgName:'Purple - Mahadev',mood:'bhakti'};
-else if(/radha|राधा|दुर्गा|लक्ष्मी|माता|रानी/.test(t)) d={char:'radha',bg:'#a92362',bgName:'Pink - Devi',mood:'bhakti'};
-else if(/krishna|कृष्ण|कान्हा|गोपाल|गोविंद|राधे/.test(t)) d={char:'krishna',bg:'#1769aa',bgName:'Blue - Krishna',mood:'bhakti'};
-if(/dukh|दुख|रोना|मुश्किल|दर्द|हार|अकेला|sad/.test(t)) d.mood='soft';
-if(/jeet|जीत|जोश|शक्ति|जय|हर हर|ताकत|वीर|power/.test(t)) d.mood='power';
-return d;
+const $=id=>document.getElementById(id);
+
+function loadVoices(){
+ voices=speechSynthesis.getVoices();
+ let select=$("voiceSelect");
+ select.innerHTML="";
+
+ voices.forEach((v,i)=>{
+ let op=document.createElement("option");
+ op.value=i;
+ op.textContent=v.name+" ("+v.lang+")";
+ select.appendChild(op);
+ });
+
+ let hindi=voices.findIndex(v=>v.lang.toLowerCase().startsWith("hi"));
+ if(hindi>=0)select.value=hindi;
+}
+speechSynthesis.onvoiceschanged=loadVoices;
+loadVoices();
+
+function addCharacter(){
+ let name=$("charName").value.trim();
+ let photo=$("charPhoto").files[0];
+ let audio=$("charAudio").files[0];
+
+ if(!name||!photo){
+ alert("नाम और फोटो दोनों जरूरी हैं");
+ return;
+ }
+
+ let id=Date.now()+Math.random();
+ let char={
+ id,name,
+ photo:URL.createObjectURL(photo),
+ audio:audio?URL.createObjectURL(audio):null
+ };
+
+ chars.push(char);
+ renderCharacters();
+
+ $("charName").value="";
+ $("charPhoto").value="";
+ $("charAudio").value="";
 }
 
-function charName(c){
-return ({hanuman:'Hanuman',shiv:'Mahadev',radha:'Radha Rani',krishna:'Shri Krishna'})[c]||'Bhakti';
+function renderCharacters(){
+ let box=$("characters");
+ box.innerHTML="";
+
+ chars.forEach(c=>{
+ let div=document.createElement("div");
+ div.className="character";
+
+ let img=document.createElement("img");
+ img.src=c.photo;
+
+ let title=document.createElement("b");
+ title.textContent=c.name;
+
+ let audioInfo=document.createElement("p");
+ audioInfo.className="small";
+ audioInfo.textContent=c.audio?
+ "अपनी ऑडियो लगी हुई है":"ब्राउज़र की आवाज इस्तेमाल होगी";
+
+ let del=document.createElement("button");
+ del.className="danger";
+ del.textContent="हटाएँ";
+ del.onclick=()=>{
+ chars=chars.filter(x=>x.id!==c.id);
+ renderCharacters();
+ };
+
+ div.append(img,title,audioInfo,del);
+ box.appendChild(div);
+ });
 }
 
-function splitScenes(text){
-const parts=text.split(/(?<=[।.!?])\s+|\n+/).map(x=>x.trim()).filter(Boolean);
-if(parts.length>1)return parts;
-const words=text.trim().split(/\s+/),out=[];
-for(let i=0;i<words.length;i+=9)out.push(words.slice(i,i+9).join(' '));
-return out.length?out:['Jai Shri Ram'];
+function showScriptHelp(){
+ alert(
+ "उदाहरण:\n"+
+ "कृष्ण: हे राधे, कैसी हो?\n"+
+ "राधा: मैं अच्छी हूँ प्रभु!\n\n"+
+ "हर डायलॉग नई लाइन में लिखें।"+
+ "\nनाम वही रखें जो कैरेक्टर बनाते समय रखा है।"
+ );
 }
 
-function updateDetect(){
-const d=analyze($('script').value);
-$('aChar').textContent=charName(d.char);
-$('aMusic').textContent=d.mood==='soft'?'Soft devotional':d.mood==='power'?'Powerful devotional':'Flute-style devotional';
-$('aBg').textContent=d.bgName;
-drawFrame($('script').value,d,0,0,0,splitScenes($('script').value));
+function animateMouth(active){
+ $("mouth").classList.toggle("talking",active);
 }
 
-function fitText(text,max=40){
-const words=text.split(/\s+/),lines=[];let line='';
-for(const word of words){
-if((line+' '+word).trim().length>max&&line){lines.push(line);line=word;}
-else line+=(line?' ':'')+word;
-}
-if(line)lines.push(line);
-return lines;
+function showCharacter(c,text){
+ $("person").src=c.photo;
+ $("speaker").textContent=c.name+": "+text;
 }
 
-function drawPhoto(img,t){
-const scale=Math.max(W/img.width,H/img.height)*(1+0.035*Math.sin(t*.7));
-const sw=W/scale,sh=H/scale;
-const sx=(img.width-sw)/2+Math.sin(t*.22)*Math.max(0,(img.width-sw)*.12);
-const sy=(img.height-sh)/2;
-ctx.drawImage(img,Math.max(0,sx),Math.max(0,sy),Math.min(sw,img.width),Math.min(sh,img.height),0,0,W,H);
-ctx.fillStyle='rgba(12,5,25,.38)';
-ctx.fillRect(0,0,W,H);
+function wait(ms){
+ return new Promise(resolve=>setTimeout(resolve,ms));
 }
 
-function drawFrame(text,d,p,t,index,scenes){
-const img=photos.length?photos[index%photos.length]:null;
-if(img)drawPhoto(img,t);
-else{
-const g=ctx.createLinearGradient(0,0,W,H);
-g.addColorStop(0,d.bg);g.addColorStop(1,'#100d24');
-ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-for(let i=0;i<34;i++){
-const x=(i*113+Math.sin(t+i)*32)%W,y=(i*71)%H;
-ctx.fillStyle='rgba(255,220,130,.25)';
-ctx.beginPath();ctx.arc(x,y,3+(i%4),0,Math.PI*2);ctx.fill();
-}
-ctx.textAlign='center';ctx.font='170px serif';ctx.fillStyle='rgba(255,230,170,.9)';
-ctx.fillText(d.char==='hanuman'?'🙏':d.char==='shiv'?'🔱':d.char==='radha'?'🌸':'🦚',W/2,365);
-}
-ctx.fillStyle='rgba(0,0,0,.48)';ctx.fillRect(0,0,W,90);
-ctx.textAlign='left';ctx.fillStyle='#ffdf65';ctx.font='bold 30px Arial';
-ctx.fillText('ANIME BHAKTI AI',35,58);
-ctx.textAlign='right';ctx.fillStyle='#fff';ctx.font='22px Arial';
-ctx.fillText(charName(d.char),W-35,58);
-const scene=scenes[Math.min(index,scenes.length-1)]||text;
-ctx.fillStyle='rgba(0,0,0,.68)';ctx.fillRect(35,500,W-70,175);
-const lines=fitText(scene,43);
-ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font='bold 38px Arial';
-const shown=lines.slice(0,3),startY=570-(shown.length-1)*25;
-shown.forEach((line,i)=>ctx.fillText(line,W/2,startY+i*52));
-const pulse=12+Math.abs(Math.sin(t*9))*20;
-ctx.fillStyle='#ffcc00';ctx.beginPath();ctx.arc(W-85,455,pulse,0,Math.PI*2);ctx.fill();
-ctx.fillStyle='#21152e';ctx.beginPath();ctx.arc(W-85,455,7,0,Math.PI*2);ctx.fill();
-ctx.fillStyle='rgba(255,255,255,.3)';ctx.fillRect(35,700,W-70,7);
-ctx.fillStyle='#00e676';ctx.fillRect(35,700,(W-70)*p,7);
+function speakText(text,token){
+ return new Promise(resolve=>{
+ if(token!==speechToken)return resolve();
+
+ let utter=new SpeechSynthesisUtterance(text);
+ utter.lang="hi-IN";
+ utter.rate=0.9;
+ utter.pitch=1;
+
+ if(voices.length){
+ let index=Number($("voiceSelect").value);
+ if(voices[index])utter.voice=voices[index];
+ }
+
+ utter.onstart=()=>animateMouth(true);
+ utter.onend=()=>{
+ animateMouth(false);
+ resolve();
+ };
+ utter.onerror=()=>{
+ animateMouth(false);
+ resolve();
+ };
+
+ speechSynthesis.speak(utter);
+ });
 }
 
-function showPhotoThumbs(){
-const box=$('photoPreview');box.innerHTML='';
-photoUrls.forEach(url=>{
-const im=document.createElement('img');
-im.src=url;im.className='thumb';box.appendChild(im);
-});
+function playAudio(url,token){
+ return new Promise(resolve=>{
+ if(token!==speechToken)return resolve();
+
+ let audio=new Audio(url);
+ currentAudio=audio;
+
+ audio.onplay=()=>animateMouth(true);
+ audio.onended=()=>{
+ animateMouth(false);
+ resolve();
+ };
+ audio.onerror=()=>{
+ animateMouth(false);
+ resolve();
+ };
+
+ audio.play().catch(()=>{
+ animateMouth(false);
+ resolve();
+ });
+ });
 }
 
-$('photos').addEventListener('change',e=>{
-photoUrls.forEach(URL.revokeObjectURL);
-photoUrls=[];photos=[];
-const files=[...e.target.files].filter(f=>f.type.startsWith('image/')).slice(0,12);
-files.forEach(file=>{
-const url=URL.createObjectURL(file),im=new Image();
-photoUrls.push(url);
-im.onload=()=>{photos.push(im);showPhotoThumbs();updateDetect();};
-im.src=url;
-});
-showPhotoThumbs();
-});
+async function playScript(){
+ if(chars.length===0){
+ alert("पहले कम से कम एक कैरेक्टर जोड़ें");
+ return;
+ }
 
-$('script').addEventListener('input',updateDetect);
+ stopScript();
+ running=true;
+ let token=speechToken;
 
-function stopSpeech(){
-if('speechSynthesis'in window)speechSynthesis.cancel();
+ let lines=$("script").value
+ .split("\n")
+ .map(x=>x.trim())
+ .filter(Boolean);
+
+ $("status").textContent="वीडियो प्रीव्यू चल रहा है...";
+
+ for(let line of lines){
+ if(!running||token!==speechToken)break;
+
+ let pos=line.indexOf(":");
+ if(pos<1)continue;
+
+ let name=line.substring(0,pos).trim();
+ let dialogue=line.substring(pos+1).trim();
+
+ let c=chars.find(
+ x=>x.name.toLowerCase()===name.toLowerCase()
+ );
+
+ if(!c){
+ $("status").textContent=
+ "कैरेक्टर नहीं मिला: "+name;
+ continue;
+ }
+
+ showCharacter(c,dialogue);
+
+ if(c.audio){
+ await playAudio(c.audio,token);
+ }else{
+ await speakText(dialogue,token);
+ }
+
+ if(!running||token!==speechToken)break;
+ await wait(300);
+ }
+
+ if(token===speechToken){
+ running=false;
+ animateMouth(false);
+ $("status").textContent="स्क्रिप्ट पूरी हुई ❤️";
+ }
 }
 
-$('voicePreview').onclick=()=>{
-const text=$('script').value.trim();
-if(!text)return;
-if(!('speechSynthesis'in window)){
-alert('Is browser mein voice preview available nahi hai.');
-return;
-}
-stopSpeech();
-const u=new SpeechSynthesisUtterance(text);
-u.lang='hi-IN';u.rate=analyze(text).mood==='power'?1.08:1;
-speechSynthesis.speak(u);
-};
-
-$('voiceStop').onclick=stopSpeech;
-
-$('micBtn').onclick=async()=>{
-if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){
-$('micStatus').textContent='Is browser mein mic recording supported nahi hai.';
-return;
-}
-try{
-micStream=await navigator.mediaDevices.getUserMedia({audio:true});
-micChunks=[];micRecorder=new MediaRecorder(micStream);
-micRecorder.ondataavailable=e=>{if(e.data.size)micChunks.push(e.data);};
-micRecorder.onstop=()=>{
-micBlob=new Blob(micChunks,{type:micRecorder.mimeType||'audio/webm'});
-$('micStatus').textContent='✅ Aapki voice record ho gayi. Video mein use hogi.';
-micStream.getTracks().forEach(t=>t.stop());micStream=null;
-};
-micRecorder.start();
-$('micBtn').disabled=true;$('micStop').disabled=false;
-$('micStatus').textContent='🔴 Recording chal rahi hai... script boliye.';
-}catch(e){
-$('micStatus').textContent='Mic permission nahi mili: '+e.message;
-}
-};
-
-$('micStop').onclick=()=>{
-if(micRecorder&&micRecorder.state!=='inactive'){
-micRecorder.stop();$('micBtn').disabled=false;$('micStop').disabled=true;
-}
-};
-
-function stopMusic(){
-if(musicTimer)clearInterval(musicTimer);
-musicTimer=0;
+function pauseScript(){
+ speechSynthesis.pause();
+ if(currentAudio)currentAudio.pause();
+ animateMouth(false);
+ $("status").textContent="पॉज किया गया";
 }
 
-function startMusic(dest,d){
-const AC=window.AudioContext||window.webkitAudioContext;
-if(!AC)throw new Error('Audio support available nahi hai');
-if(!audioCtx)audioCtx=new AC();
-if(audioCtx.state==='suspended')audioCtx.resume();
-const master=audioCtx.createGain();master.gain.value=.055;master.connect(dest);
-const notes=d.mood==='soft'?[392,349,330,294]:d.mood==='power'?[523,659,784,880]:[523,659,784,659,587];
-let n=0;
-musicTimer=setInterval(()=>{
-if(!recording){stopMusic();return;}
-const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();
-osc.type='sine';osc.frequency.value=notes[n++%notes.length];
-gain.gain.setValueAtTime(.0001,audioCtx.currentTime);
-gain.gain.exponentialRampToValueAtTime(.18,audioCtx.currentTime+.04);
-gain.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+.5);
-osc.connect(gain);gain.connect(master);osc.start();osc.stop(audioCtx.currentTime+.52);
-},d.mood==='power'?390:650);
+function stopScript(){
+ running=false;
+ speechToken++;
+ speechSynthesis.cancel();
+
+ if(currentAudio){
+ currentAudio.pause();
+ currentAudio.currentTime=0;
+ currentAudio=null;
+ }
+
+ animateMouth(false);
 }
 
-async function makeVideo(){
-if(recording)return;
-const text=$('script').value.trim();
-if(!text){alert('Pehle script likho bhai!');return;}
-if(!window.MediaRecorder||!canvas.captureStream){
-alert('Chrome ka latest version kholkar try karein.');
-return;
+function testVoice(){
+ let u=new SpeechSynthesisUtterance(
+ "नमस्कार भक्तों, भगवान श्रीकृष्ण की जय।"
+ );
+ u.lang="hi-IN";
+
+ let index=Number($("voiceSelect").value);
+ if(voices[index])u.voice=voices[index];
+
+ speechSynthesis.cancel();
+ speechSynthesis.speak(u);
 }
-stopSpeech();finalBlob=null;chunks=[];
-$('downloadBtn').disabled=true;$('makeBtn').disabled=true;
-const d=analyze(text),scenes=splitScenes(text);
-const chosenAudio=$('voiceFile').files[0]||micBlob;
-let duration=Number($('duration').value)*1000;
-
-if(chosenAudio){
-try{
-const temp=new Audio();
-temp.src=URL.createObjectURL(chosenAudio);
-await new Promise(resolve=>{
-temp.onloadedmetadata=resolve;temp.onerror=resolve;
-setTimeout(resolve,2500);
-});
-if(Number.isFinite(temp.duration)&&temp.duration>1)
-duration=Math.min(180000,Math.max(5000,temp.duration*1000));
-temp.src='';
-}catch(e){}
-}
-
-const sceneDuration=duration/scenes.length;
-let voiceUrl=null;
-
-try{
-recording=true;
-$('status').textContent='⏳ Video ban raha hai... page khula rakhein.';
-const videoStream=canvas.captureStream(30);
-const AC=window.AudioContext||window.webkitAudioContext;
-if(!AC)throw new Error('AudioContext supported nahi hai');
-if(!audioCtx)audioCtx=new AC();
-const dest=audioCtx.createMediaStreamDestination();
-startMusic(dest,d);
-
-if(chosenAudio){
-voiceUrl=URL.createObjectURL(chosenAudio);
-voiceAudio=new Audio();
-voiceAudio.src=voiceUrl;voiceAudio.preload='auto';
-const source=audioCtx.createMediaElementSource(voiceAudio);
-const voiceGain=audioCtx.createGain();voiceGain.gain.value=1;
-source.connect(voiceGain);voiceGain.connect(dest);
-voiceGain.connect(audioCtx.destination);
-await audioCtx.resume();await voiceAudio.play();
-}
-
-const stream=new MediaStream([
-...videoStream.getVideoTracks(),
-...dest.stream.getAudioTracks()
-]);
-const types=[
-'video/webm;codecs=vp9,opus',
-'video/webm;codecs=vp8,opus',
-'video/webm'
-];
-const mime=types.find(x=>MediaRecorder.isTypeSupported(x))||'';
-recorder=new MediaRecorder(stream,mime?{
-mimeType:mime,videoBitsPerSecond:4500000
-}:{});
-
-recorder.ondataavailable=e=>{
-if(e.data&&e.data.size)chunks.push(e.data);
-};
-
-recorder.onerror=e=>{
-$('status').textContent='Recording error: '+(e.error?.message||'unknown');
-};
-
-recorder.onstop=()=>{
-finalBlob=new Blob(chunks,{type:recorder.mimeType||'video/webm'});
-$('downloadBtn').disabled=!finalBlob.size;
-$('makeBtn').disabled=false;
-recording=false;stopMusic();
-stream.getTracks().forEach(t=>t.stop());
-if(voiceAudio){voiceAudio.pause();voiceAudio=null;}
-if(voiceUrl)URL.revokeObjectURL(voiceUrl);
-$('status').textContent=finalBlob.size?
-'✅ Video taiyar! Download button dabayein.':
-'Video file nahi bani. Dobara try karein.';
-$('progress').style.width='100%';
-};
-
-recorder.start(250);
-const started=performance.now();
-
-function frame(now){
-if(!recording)return;
-const elapsed=now-started,p=Math.min(1,elapsed/duration);
-const idx=Math.min(scenes.length-1,Math.floor(elapsed/sceneDuration));
-drawFrame(text,d,p,elapsed/1000,idx,scenes);
-$('progress').style.width=Math.round(p*100)+'%';
-$('status').textContent='⏳ Video ban raha hai... '+Math.round(p*100)+'%';
-if(p>=1){
-recording=false;stopMusic();
-if(recorder&&recorder.state!=='inactive')recorder.stop();
-return;
-}
-raf=requestAnimationFrame(frame);
-}
-raf=requestAnimationFrame(frame);
-
-}catch(err){
-recording=false;stopMusic();$('makeBtn').disabled=false;
-if(recorder&&recorder.state!=='inactive'){
-try{recorder.stop();}catch(e){}
-}
-$('status').textContent='Video start nahi hua: '+err.message;
-alert('Video banane mein dikkat: '+err.message);
-}
-}
-
-$('makeBtn').onclick=makeVideo;
-
-$('downloadBtn').onclick=()=>{
-if(!finalBlob)return;
-const url=URL.createObjectURL(finalBlob),a=document.createElement('a');
-a.href=url;a.download='anime-bhakti-'+Date.now()+'.webm';
-document.body.appendChild(a);a.click();a.remove();
-setTimeout(()=>URL.revokeObjectURL(url),60000);
-};
-
-updateDetect();
 </script>
+
 </body>
 </html>
+
+
+
